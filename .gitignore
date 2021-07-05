@@ -1,5 +1,6 @@
 .gitignore
 *.bag
-/CustomDataset
+/CustomDataset/*
 /bags
 /test
+*.zip
