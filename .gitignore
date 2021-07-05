@@ -1,1 +1,5 @@
+.gitignore
 *.bag
+/CustomDataset
+/bags
+/test

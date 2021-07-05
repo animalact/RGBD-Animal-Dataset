@@ -23,12 +23,23 @@ class BagConverter:
                     bag = os.path.join(root, filename)
                     if os.path.exists(bag):
                         self.bags.append(bag)
+
+        # sort self.bags
+        self.bags = sorted(self.bags)
         print(self.bags)
 
-    def convertBagToImage(self, bag_file):
+
+    def _getSaveFolder(self, bag_file):
         dir_name = os.path.dirname(bag_file)
         folder_name = os.path.splitext(os.path.basename(bag_file))[0]
         save_folder = os.path.join(dir_name, folder_name)
+
+        return save_folder
+
+    def convertBagToImage(self, bag_file):
+        save_folder = self._getSaveFolder(bag_file)
+        if os.path.exists(save_folder):
+            return
 
         bag_filename = bag_file
         bag_reader = o3d.t.io.RSBagReader()
