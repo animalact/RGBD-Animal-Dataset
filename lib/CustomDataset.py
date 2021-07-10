@@ -240,10 +240,5 @@ class CustomDataset():
         return color_copy_set, depth_copy_set
 
 
-from_folder = "/Users/song-yunsang/Desktop/Business/Butler/Dataset/bags"
-save_folder = "/Users/song-yunsang/Desktop/Business/Butler/Dataset/CustomDataset"
-cd = CustomDataset()
-# cd.extractFilename(10)
-# cd.copyBag("/Users/song-yunsang/Desktop/Business/Butler/Dataset/bags/20210702_154436", "/Users/song-yunsang/Desktop/Business/Butler/Dataset/CustomDataset/")
-cd.createCustomBags(from_folder, save_folder)
+
 

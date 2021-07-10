@@ -1,6 +1,15 @@
+# .
 .gitignore
-*.bag
+.DS_Store
+
+# folders
 /CustomDataset/*
 /bags
 /test
+
+# files
 *.zip
+*.bag
+
+
+

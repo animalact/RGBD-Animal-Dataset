@@ -1,7 +1,13 @@
-import os.path
+import os
 import argparse
 
 import open3d as o3d
+
+from utils.createLabel import createEmptyLabel
+
+"""
+Caution : depth frame and RGB frame should be same!!
+"""
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -15,14 +21,13 @@ class BagConverter:
         if not bag_folder:
             bag_folder = os.path.join(FILE_DIR, "data_origin")
             print(bag_folder)
-
         # load bag files from folder
-        for root, dir, filenames in os.walk(bag_folder):
-            for filename in filenames:
-                if filename[-3:] == "bag":
-                    bag = os.path.join(root, filename)
-                    if os.path.exists(bag):
-                        self.bags.append(bag)
+        for filename in os.listdir(bag_folder):
+            if filename[-3:] == "bag":
+                bag_folder = os.path.abspath(bag_folder)
+                bag = os.path.join(bag_folder, filename)
+                if os.path.exists(bag):
+                    self.bags.append(bag)
 
         # sort self.bags
         self.bags = sorted(self.bags)
@@ -31,12 +36,16 @@ class BagConverter:
 
     def _getSaveFolder(self, bag_file):
         dir_name = os.path.dirname(bag_file)
-        folder_name = os.path.splitext(os.path.basename(bag_file))[0]
-        save_folder = os.path.join(dir_name, folder_name)
+        bag_name = os.path.splitext(os.path.basename(bag_file))[0]
+        save_folder = os.path.join(dir_name, bag_name)
 
         return save_folder
 
-    def convertBagToImage(self, bag_file):
+    def convert(self, bag_file):
+        """
+        convert Bag To Image
+        create new folder contains color and depth images
+        """
         save_folder = self._getSaveFolder(bag_file)
         if os.path.exists(save_folder):
             return
@@ -53,6 +62,8 @@ class BagConverter:
 
         bag_reader.close()
 
+        createEmptyLabel(save_folder)
+
     def convertAll(self, bag_folder):
         self.loadBags(bag_folder)
         if not self.bags:
@@ -62,25 +73,3 @@ class BagConverter:
         for bagfile in self.bags:
             self.convertBagToImage(bagfile)
 
-def main():
-    converter = BagConverter()
-    
-    if args.folder:
-        converter.convertAll(args.folder)
-        return
-    if args.input:
-        converter.convertBagToImage(args.input)
-        return
-    print("something wrong!")
-    raise InterruptedError
-
-
-parser = argparse.ArgumentParser(description="Read recorded bag file and save depth and color png file.")
-# Add argument which takes path to a bag file as an input
-parser.add_argument("-f", "--folder", type=str, help="Path to the folder contained bag files")
-parser.add_argument("-i", "--input", type=str, help="Convert a bag file to color and depth image")
-
-# Parse the command line arguments to an object
-args = parser.parse_args()
-
-main()

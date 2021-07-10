@@ -1,7 +1,6 @@
 import os
 from utils.getFolderList import getFolderList
 
-
 def createEmptyLabel(folder):
     if os.path.exists(folder):
         print("folder exists")
@@ -23,6 +22,10 @@ def generateLabels(root_folder):
 def checkLabels(root_folder):
     act_dict = {}
     for dir in getFolderList(root_folder):
+
+        if dir[-4:] == "done":
+            continue
+
         label = os.path.join(dir, "label.txt")
         with open(label, "r") as f:
             for l in f:
